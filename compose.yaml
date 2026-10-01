@@ -1,0 +1,91 @@
+name: local-ai
+
+services:
+  llm:
+    image: ghcr.io/ggml-org/llama.cpp:server@sha256:23fd59bc5e5b06ca68003a5772d441f0411fb723eeaff850b9111bcd2ac4fd33
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${LLM_PORT:-8000}:8080"
+    environment:
+      LLAMA_CACHE: /models
+    command:
+      - --hf-repo
+      - Qwen/Qwen2.5-7B-Instruct-GGUF
+      - --hf-file
+      - qwen2.5-7b-instruct-q4_k_m-00001-of-00002.gguf
+      - --alias
+      - Qwen2.5-7B-Instruct
+      - --host
+      - 0.0.0.0
+      - --cors-origins
+      - localhost
+      - --port
+      - "8080"
+      - --ctx-size
+      - "2048"
+      - --parallel
+      - "1"
+      - --threads
+      - "4"
+      - --batch-size
+      - "128"
+      - --ubatch-size
+      - "128"
+      - --n-gpu-layers
+      - "0"
+    volumes:
+      - llm-data:/models
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 20m
+    logging: &logging
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+  tei:
+    image: ${TEI_IMAGE:-ghcr.io/huggingface/text-embeddings-inference:cpu-arm64-1.9@sha256:798cd7615e060a72ccbdf19aa0ada52289c6a0147490195bafaece6ce04d70f1}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${TEI_PORT:-8080}:80"
+    command:
+      - --model-id
+      - BAAI/bge-m3
+      - --revision
+      - 5617a9f61b028005a4858fdac845db406aefb181
+      - --port
+      - "80"
+      - --hostname
+      - 0.0.0.0
+      - --dtype
+      - float32
+      - --pooling
+      - cls
+      - --max-batch-tokens
+      - "512"
+      - --max-client-batch-size
+      - "8"
+      - --max-batch-requests
+      - "8"
+      - --max-concurrent-requests
+      - "8"
+      - --tokenization-workers
+      - "2"
+      - --auto-truncate
+    volumes:
+      - tei-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 20m
+    logging: *logging
+
+volumes:
+  llm-data:
+  tei-data:

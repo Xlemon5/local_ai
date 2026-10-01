@@ -1,0 +1,44 @@
+{
+  "timestamp_utc": "2026-10-01T18:06:32.093815+00:00",
+  "llm_url": "http://127.0.0.1:8000",
+  "tei_url": "http://127.0.0.1:8080",
+  "checks": [
+    {
+      "name": "Qwen /v1/chat/completions",
+      "status": "passed",
+      "details": {
+        "model": "Qwen2.5-7B-Instruct",
+        "answer": "42",
+        "usage": {
+          "completion_tokens": 3,
+          "prompt_tokens": 51,
+          "total_tokens": 54,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "duration_seconds": 10.581
+    },
+    {
+      "name": "BGE-M3 embeddings",
+      "status": "passed",
+      "details": {
+        "model": "BAAI/bge-m3",
+        "dimension": 1024,
+        "texts": [
+          "Кошка спит на диване.",
+          "A cat is sleeping on the sofa.",
+          "Вулкан извергает лаву и пепел.",
+          "Кошка спит на диване."
+        ],
+        "cosine_translation": 0.782093,
+        "cosine_unrelated": 0.374135,
+        "cosine_duplicate": 1.0,
+        "openai_endpoint": "passed"
+      },
+      "duration_seconds": 0.64
+    }
+  ],
+  "passed": true
+}
