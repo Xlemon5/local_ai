@@ -1,0 +1,7 @@
+# Выполнить из корня проекта при запущенном Docker Desktop.
+docker compose up -d llm
+
+# Если контейнер на паузе:
+docker compose unpause llm
+
+python3 TextTest.py

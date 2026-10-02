@@ -1,0 +1,25 @@
+{
+  "timestamp_utc": "2026-10-02T06:54:39.249911+00:00",
+  "checks": [
+    {
+      "name": "Qwen /v1/chat/completions",
+      "status": "passed",
+      "details": {
+        "model": "Qwen2.5-7B-Instruct",
+        "answer": "42",
+        "usage": {
+          "completion_tokens": 3,
+          "prompt_tokens": 51,
+          "total_tokens": 54,
+          "prompt_tokens_details": {
+            "cached_tokens": 50
+          }
+        },
+        "finish_reason": "stop"
+      },
+      "duration_seconds": 2.411
+    }
+  ],
+  "llm_url": "http://127.0.0.1:8000",
+  "passed": true
+}

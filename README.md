@@ -2,7 +2,8 @@
 
 Решение задания: LLM работает через **llama.cpp** с OpenAI-совместимым API,
 эмбеддинги — через **Hugging Face Text Embeddings Inference (TEI)**.
-Python-скрипт отправляет запросы к обоим серверам и проверяет ответы.
+Для каждой модели есть отдельный Python-тест с понятным выводом результатов.
+Общий `test_api.py` позволяет выполнить обе проверки одной командой.
 
 Подробная документация:
 
@@ -37,6 +38,17 @@ Q4_K_M — квантизация исходной Qwen2.5-7B-Instruct, позв
 
 ```bash
 docker compose up -d
+python3 TextTest.py
+python3 EmbeddingsTest.py
+```
+
+Если контейнеры были поставлены на паузу, перед тестами выполните
+`docker compose unpause`. Оба API должны перейти в состояние `healthy`.
+
+`TextTest.py` проверяет только Qwen и работает без TEI. `EmbeddingsTest.py`
+проверяет только BGE-M3 и работает без Qwen. Для обеих проверок одной командой:
+
+```bash
 python3 test_api.py
 ```
 
@@ -45,6 +57,8 @@ python3 test_api.py
 ```bash
 python3 test_api.py --wait 3600 --timeout 600
 ```
+
+Такие же параметры `--wait`, `--timeout` и `--report` принимают отдельные тесты.
 
 Просмотр состояния и загрузки:
 
@@ -64,13 +78,47 @@ docker compose logs -f llm tei
 2. TEI: `/info` сообщает `BAAI/bge-m3`; `/embed` возвращает нужное количество
    векторов размерности 1024, без NaN/Infinity и с нормой около 1.
    Одинаковые тексты дают одинаковые векторы, а перевод на английский ближе
-   к русскому предложению, чем посторонний текст. Дополнительно проверяются
+   к русскому предложению, чем посторонний текст. Проверяется также русское
+   перефразирование «На диване спит кот.». Дополнительно проверяются
    `/v1/embeddings`, индексы и согласованность двух API.
 
 Результат, ответы, значения сходства и длительность сохраняются в
 [`artifacts/test-report.json`](artifacts/test-report.json).
+Отдельные тесты записывают собственные отчёты:
+[`text-test-report.json`](artifacts/text-test-report.json) и
+[`embeddings-test-report.json`](artifacts/embeddings-test-report.json).
 Неудачная проверка одного сервера не отменяет проверку второго.
 Это функциональный smoke test, а не оценка общего качества моделей.
+
+## Структура для сдачи задания
+
+```text
+local_ai/
+├── compose.yaml                       # Два сервера и постоянные тома моделей
+├── TextTest.py                        # Отдельный тест языковой модели
+├── EmbeddingsTest.py                  # Отдельный тест эмбеддингов и сходства
+├── api_utils.py                       # Общие HTTP-запросы, ожидание и отчёты
+├── test_api.py                        # Запуск обеих проверок
+├── text_model_run_commands.txt        # Команды запуска и проверки Qwen
+├── embeddings_model_run_commands.txt  # Команды запуска и проверки BGE-M3
+├── requirements.txt                   # Внешние библиотеки не требуются
+├── text_model_test.png                # Изображение фактического вывода теста Qwen
+├── embedding_model_test.png           # Изображение фактического вывода теста TEI
+├── artifacts/                        # JSON-отчёты и текстовый вывод запусков
+└── docs/                             # Схемы и пояснительная записка
+```
+
+Устанавливать `requests`, `numpy` и другие библиотеки не нужно: тесты используют
+стандартную библиотеку Python. `requirements.txt` содержит это пояснение.
+`api_utils.py` должен находиться рядом с файлами тестов.
+
+Результаты раздельного запуска сохранены как текст:
+[Qwen](artifacts/text_model_test.txt), [BGE-M3](artifacts/embedding_model_test.txt).
+PNG ниже — изображения этого вывода, полученного на реальных API.
+
+![Результат отдельного теста Qwen](text_model_test.png)
+
+![Результат отдельного теста BGE-M3](embedding_model_test.png)
 
 ### Результат контрольного запуска
 
@@ -88,7 +136,10 @@ Docker. Обе модели запущены одновременно в дву�
 | TEI `/v1/embeddings` | PASS |
 | Итоговый код завершения теста | 0 |
 
-Машиночитаемое подтверждение: [`artifacts/test-report.json`](artifacts/test-report.json).
+Машиночитаемое подтверждение первого запуска:
+[`artifacts/initial-test-report.json`](artifacts/initial-test-report.json).
+Актуальный общий отчёт после разделения тестов находится в
+[`artifacts/test-report.json`](artifacts/test-report.json).
 
 ## Примеры запросов
 

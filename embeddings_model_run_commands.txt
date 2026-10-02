@@ -1,0 +1,7 @@
+# Выполнить из корня проекта при запущенном Docker Desktop.
+docker compose up -d tei
+
+# Если контейнер на паузе:
+docker compose unpause tei
+
+python3 EmbeddingsTest.py

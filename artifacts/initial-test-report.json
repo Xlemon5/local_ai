@@ -1,5 +1,7 @@
 {
-  "timestamp_utc": "2026-10-02T06:57:35.346188+00:00",
+  "timestamp_utc": "2026-10-01T18:06:32.093815+00:00",
+  "llm_url": "http://127.0.0.1:8000",
+  "tei_url": "http://127.0.0.1:8080",
   "checks": [
     {
       "name": "Qwen /v1/chat/completions",
@@ -12,12 +14,11 @@
           "prompt_tokens": 51,
           "total_tokens": 54,
           "prompt_tokens_details": {
-            "cached_tokens": 50
+            "cached_tokens": 0
           }
-        },
-        "finish_reason": "stop"
+        }
       },
-      "duration_seconds": 2.123
+      "duration_seconds": 10.581
     },
     {
       "name": "BGE-M3 embeddings",
@@ -29,34 +30,15 @@
           "Кошка спит на диване.",
           "A cat is sleeping on the sofa.",
           "Вулкан извергает лаву и пепел.",
-          "Кошка спит на диване.",
-          "На диване спит кот."
-        ],
-        "count": 5,
-        "vector_preview": [
-          -0.037595212,
-          0.013741436,
-          -0.046943672,
-          -0.037164927,
-          -0.033169676
-        ],
-        "norms": [
-          1.0,
-          1.0,
-          1.0,
-          1.0,
-          1.0
+          "Кошка спит на диване."
         ],
         "cosine_translation": 0.782093,
         "cosine_unrelated": 0.374135,
         "cosine_duplicate": 1.0,
-        "cosine_paraphrase": 0.903626,
         "openai_endpoint": "passed"
       },
-      "duration_seconds": 0.875
+      "duration_seconds": 0.64
     }
   ],
-  "llm_url": "http://127.0.0.1:8000",
-  "tei_url": "http://127.0.0.1:8080",
   "passed": true
 }
