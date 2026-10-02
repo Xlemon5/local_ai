@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1430" viewBox="0 0 1600 1430" role="img" aria-labelledby="title description">
+  <title id="title">Локальные Qwen и BGE-M3: схема развёртывания</title>
+  <desc id="description">Клиент в macOS обращается к двум независимым API: порт 8000 ведёт в llama.cpp с Qwen, порт 8080 — в TEI с BGE-M3. Контейнеры работают на CPU внутри Linux VM Docker Desktop, сохраняют веса в разных именованных томах. Образы и веса поступают из внешних источников при подготовке. Python-тест записывает JSON-отчёт.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#526378"/>
+    </marker>
+    <marker id="blueArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="greenArrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse" markerUnits="userSpaceOnUse">
+      <path d="M 0 0 L 10 5 L 0 10 Z" fill="#16805c"/>
+    </marker>
+    <style>
+      text { font-family: Arial, Helvetica, sans-serif; fill: #172b45; }
+      .heading { font-size: 26px; font-weight: 700; }
+      .body { font-size: 21px; }
+      .small { font-size: 18px; fill: #526378; }
+      .mono { font-family: Menlo, Consolas, monospace; font-size: 20px; }
+      .label { font-size: 16px; font-weight: 700; letter-spacing: 1px; fill: #526378; }
+      .blue { fill: #1e4aa0; }
+      .green { fill: #106347; }
+      .line { fill: none; stroke-width: 2.5; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="1430" fill="#f5f7fb"/>
+  <text x="60" y="65" font-size="36" font-weight="700">Две модели на одном Mac</text>
+  <text x="60" y="104" class="body" fill="#526378">Qwen генерирует текст. BGE-M3 вычисляет векторы. Каждый сервер имеет свой API.</text>
+
+  <rect x="40" y="140" width="1520" height="1020" rx="24" fill="#fff" stroke="#cbd5e1" stroke-width="2"/>
+  <text x="80" y="181" class="label">КОМПЬЮТЕР ПОЛЬЗОВАТЕЛЯ · macOS · ARM64 · 16 ГБ RAM</text>
+
+  <rect x="80" y="215" width="990" height="125" rx="16" fill="#f0f4fa" stroke="#bdcbdc"/>
+  <text x="110" y="253" class="heading">Клиент: test_api.py / curl / браузер</text>
+  <text x="110" y="288" class="body">Отправляет HTTP-запросы и получает JSON-ответы</text>
+  <text x="110" y="318" class="small">Python-тест последовательно проверяет оба сервера</text>
+
+  <path d="M 1070 278 L 1118 278" class="line" stroke="#526378" marker-end="url(#arrow)"/>
+  <rect x="1120" y="215" width="390" height="125" rx="16" fill="#fff8e8" stroke="#dec594"/>
+  <text x="1145" y="254" class="heading">Отчёт теста</text>
+  <text x="1145" y="288" class="mono" style="font-size:17px">artifacts/test-report.json</text>
+  <text x="1145" y="318" class="small">Ответ, метрики, PASS / FAIL</text>
+
+  <path d="M 330 342 L 330 367 L 420 367 L 420 403" class="line" stroke="#2563eb" marker-start="url(#blueArrow)" marker-end="url(#blueArrow)"/>
+  <path d="M 850 342 L 850 367 L 1180 367 L 1180 403" class="line" stroke="#16805c" marker-start="url(#greenArrow)" marker-end="url(#greenArrow)"/>
+  <text x="455" y="387" class="small blue">Сообщения ↔ текст</text>
+  <text x="1215" y="387" class="small green">Тексты ↔ векторы</text>
+
+  <rect x="175" y="405" width="490" height="60" rx="12" fill="#eaf2ff" stroke="#9cbaf5"/>
+  <text x="420" y="443" text-anchor="middle" class="mono blue">127.0.0.1:8000</text>
+  <rect x="935" y="405" width="490" height="60" rx="12" fill="#e7f6ef" stroke="#8dceb2"/>
+  <text x="1180" y="443" text-anchor="middle" class="mono green">127.0.0.1:8080</text>
+
+  <rect x="80" y="505" width="1440" height="610" rx="20" fill="#fafcff" stroke="#a9bbd1" stroke-width="2"/>
+  <text x="800" y="538" text-anchor="middle" class="heading">Docker Desktop · Linux VM</text>
+  <text x="800" y="566" text-anchor="middle" class="small">Сеть local-ai_default · CPU · около 8 ГБ памяти VM</text>
+  <path d="M 420 467 L 420 588" class="line" stroke="#2563eb" marker-start="url(#blueArrow)" marker-end="url(#blueArrow)"/>
+  <path d="M 1180 467 L 1180 588" class="line" stroke="#16805c" marker-start="url(#greenArrow)" marker-end="url(#greenArrow)"/>
+  <text x="180" y="540" class="small blue">8000 → 8080</text>
+  <text x="1240" y="540" class="small green">8080 → 80</text>
+
+  <rect x="120" y="590" width="600" height="230" rx="16" fill="#eaf2ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="150" y="629" class="heading blue">llm · llama-server</text>
+  <text x="150" y="665" class="body blue">Qwen2.5-7B-Instruct · GGUF Q4_K_M</text>
+  <text x="150" y="704" class="mono blue">http://llm:8080</text>
+  <text x="150" y="739" class="mono blue" style="font-size:18px">POST /v1/chat/completions</text>
+  <text x="150" y="770" class="small blue">Контекст 2048 токена · 1 слот · 4 CPU-потока</text>
+  <text x="150" y="800" class="small blue">Генерация ответа по одному токену</text>
+
+  <rect x="880" y="590" width="600" height="230" rx="16" fill="#e7f6ef" stroke="#16805c" stroke-width="2"/>
+  <text x="910" y="629" class="heading green">tei · Text Embeddings Inference</text>
+  <text x="910" y="665" class="body green">BGE-M3 · ONNX backend · float32</text>
+  <text x="910" y="704" class="mono green">http://tei:80</text>
+  <text x="910" y="739" class="mono green" style="font-size:18px">POST /embed или /v1/embeddings</text>
+  <text x="910" y="770" class="small green">До 512 токенов на вход · вектор из 1024 чисел</text>
+  <text x="910" y="800" class="small green">Энкодер → CLS pooling → нормализация</text>
+
+  <path d="M 420 938 L 420 823" class="line" stroke="#2563eb" marker-start="url(#blueArrow)" marker-end="url(#blueArrow)"/>
+  <path d="M 1180 938 L 1180 823" class="line" stroke="#16805c" marker-start="url(#greenArrow)" marker-end="url(#greenArrow)"/>
+  <text x="145" y="866" class="small blue">Кэш загрузчика</text>
+  <text x="145" y="893" class="small blue">и чтение весов в память</text>
+  <text x="905" y="866" class="small green">Кэш загрузчика</text>
+  <text x="905" y="893" class="small green">и чтение весов в память</text>
+
+  <rect x="120" y="940" width="600" height="100" rx="16" fill="#f3f7ff" stroke="#9cbaf5"/>
+  <text x="150" y="976" class="mono blue">local-ai_llm-data → /models</text>
+  <text x="150" y="1010" class="small blue">Обе части GGUF и метаданные Qwen</text>
+  <rect x="880" y="940" width="600" height="100" rx="16" fill="#f2fbf6" stroke="#8dceb2"/>
+  <text x="910" y="976" class="mono green">local-ai_tei-data → /data</text>
+  <text x="910" y="1010" class="small green">Веса BGE-M3, конфигурация и токенизатор</text>
+
+  <text x="800" y="1080" text-anchor="middle" class="body">Два независимых сервиса: между моделями нет автоматического обмена.</text>
+  <text x="800" y="1104" text-anchor="middle" class="small">Тома сохраняют веса после пересоздания контейнеров; рабочая память готовится заново.</text>
+
+  <path d="M 405 1208 L 405 1118" class="line" stroke="#526378" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+  <path d="M 1195 1208 L 1195 1118" class="line" stroke="#526378" stroke-dasharray="7 6" marker-end="url(#arrow)"/>
+  <text x="435" y="1187" class="small">при подготовке</text>
+  <text x="1225" y="1187" class="small">при подготовке</text>
+
+  <rect x="80" y="1210" width="650" height="130" rx="16" fill="#edf1f6" stroke="#bdcbdc"/>
+  <text x="110" y="1250" class="heading">ghcr.io · реестр образов</text>
+  <text x="110" y="1287" class="body">Docker получает программы серверов</text>
+  <text x="110" y="1317" class="small">Образы зафиксированы по SHA256 digest</text>
+  <rect x="870" y="1210" width="650" height="130" rx="16" fill="#edf1f6" stroke="#bdcbdc"/>
+  <text x="900" y="1250" class="heading">Hugging Face · файлы моделей</text>
+  <text x="900" y="1287" class="body">Загрузчики серверов заполняют /models и /data</text>
+  <text x="900" y="1317" class="small">Получение файлов отделено от инференса</text>
+
+  <text x="80" y="1390" class="small">HTTP API доступны с этого Mac. Веса хранятся в Docker; исходный код, документация и отчёт — в Git.</text>
+</svg>
