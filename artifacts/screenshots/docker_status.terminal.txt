@@ -1,0 +1,8 @@
+local_ai % docker compose ps --format 'table {{.Name}}\t{{.Service}}\t{{.Status}}\t{{.Ports}}' | tee artifacts/docker_status.txt
+NAME             SERVICE   STATUS                  PORTS
+local-ai-llm-1   llm       Up 25 hours (healthy)   127.0.0.1:8000->8080/tcp
+local-ai-tei-1   tei       Up 25 hours (healthy)   127.0.0.1:8080->80/tcp
+local_ai % print "Код завершения: ${pipestatus[1]}"
+Код завершения: 0
+local_ai % printf done > /private/tmp/local_ai_capture_3.done
+local_ai %

@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-10-02T06:57:35.346188+00:00",
+  "timestamp_utc": "2026-10-02T19:14:49.978670+00:00",
   "checks": [
     {
       "name": "Qwen /v1/chat/completions",
@@ -17,7 +17,7 @@
         },
         "finish_reason": "stop"
       },
-      "duration_seconds": 2.123
+      "duration_seconds": 2.005
     },
     {
       "name": "BGE-M3 embeddings",
@@ -53,7 +53,7 @@
         "cosine_paraphrase": 0.903626,
         "openai_endpoint": "passed"
       },
-      "duration_seconds": 0.875
+      "duration_seconds": 0.733
     }
   ],
   "llm_url": "http://127.0.0.1:8000",

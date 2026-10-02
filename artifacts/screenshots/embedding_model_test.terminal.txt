@@ -1,3 +1,4 @@
+local_ai % python3 EmbeddingsTest.py 2>&1 | tee artifacts/embedding_model_test.txt
 Дата проверки (UTC): 2026-10-02T19:14:44.450881+00:00
 
 === BGE-M3 embeddings ===
@@ -23,3 +24,7 @@ PASS: все проверки этой модели пройдены.
 
 Отчёт: artifacts/embeddings-test-report.json
 Все проверки пройдены.
+local_ai % print "Код завершения: ${pipestatus[1]}"
+Код завершения: 0
+local_ai % printf done > /private/tmp/local_ai_capture_1.done
+local_ai %

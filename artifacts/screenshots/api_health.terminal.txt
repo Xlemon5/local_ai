@@ -1,0 +1,21 @@
+local_ai % date -u
+Fri Oct  2 19:15:33 UTC 2026
+local_ai % curl --fail -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:8000/health
+{"status":"ok"}
+HTTP 200
+local_ai % curl --fail -sS -w '\nHTTP %{http_code}\n' http://127.0.0.1:8080/health
+
+HTTP 200
+local_ai % curl --fail -sS http://127.0.0.1:8000/v1/models | python3 -c 'import json,sys; print(json.dumps([m["id"] for m in json.load(sys.stdin)["data"]], indent=2))'
+[
+  "Qwen2.5-7B-Instruct"
+]
+local_ai % curl --fail -sS http://127.0.0.1:8080/info | python3 -c 'import json,sys; d=json.load(sys.stdin); print(json.dumps({k:d.get(k) for k in ["model_id","model_sha","max_input_length","version"]}, indent=2))'
+{
+  "model_id": "BAAI/bge-m3",
+  "model_sha": "5617a9f61b028005a4858fdac845db406aefb181",
+  "max_input_length": 512,
+  "version": "1.9.4"
+}
+local_ai % printf done > /private/tmp/local_ai_capture_4.done
+local_ai %

@@ -1,3 +1,4 @@
+local_ai % python3 TextTest.py 2>&1 | tee artifacts/text_model_test.txt
 Дата проверки (UTC): 2026-10-02T19:14:31.583867+00:00
 
 === Qwen /v1/chat/completions ===
@@ -13,3 +14,7 @@ PASS: все проверки этой модели пройдены.
 
 Отчёт: artifacts/text-test-report.json
 Все проверки пройдены.
+local_ai % print "Код завершения: ${pipestatus[1]}"
+Код завершения: 0
+local_ai % printf done > /private/tmp/local_ai_capture_0.done
+local_ai %

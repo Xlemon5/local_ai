@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-10-02T06:54:41.724991+00:00",
+  "timestamp_utc": "2026-10-02T19:14:44.450881+00:00",
   "checks": [
     {
       "name": "BGE-M3 embeddings",
@@ -35,7 +35,7 @@
         "cosine_paraphrase": 0.903626,
         "openai_endpoint": "passed"
       },
-      "duration_seconds": 2.632
+      "duration_seconds": 3.065
     }
   ],
   "tei_url": "http://127.0.0.1:8080",

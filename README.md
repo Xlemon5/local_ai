@@ -102,9 +102,10 @@ local_ai/
 ├── text_model_run_commands.txt        # Команды запуска и проверки Qwen
 ├── embeddings_model_run_commands.txt  # Команды запуска и проверки BGE-M3
 ├── requirements.txt                   # Внешние библиотеки не требуются
-├── text_model_test.png                # Изображение фактического вывода теста Qwen
-├── embedding_model_test.png           # Изображение фактического вывода теста TEI
+├── text_model_test.png                # Настоящий снимок Terminal: тест Qwen
+├── embedding_model_test.png           # Настоящий снимок Terminal: тест TEI
 ├── artifacts/                        # JSON-отчёты и текстовый вывод запусков
+│   └── screenshots/                  # Снимки общего теста, Docker и HTTP API
 └── docs/                             # Схемы и пояснительная записка
 ```
 
@@ -114,11 +115,31 @@ local_ai/
 
 Результаты раздельного запуска сохранены как текст:
 [Qwen](artifacts/text_model_test.txt), [BGE-M3](artifacts/embedding_model_test.txt).
-PNG ниже — изображения этого вывода, полученного на реальных API.
+Пять PNG ниже — настоящие снимки окна macOS Terminal, сделанные 2 октября
+2026 года штатной утилитой `screencapture` после выполнения команд.
+Разрешение каждого снимка — **2800 × 1722 пикселя**. Для отдельных тестов
+увеличен шрифт; исходный PNG можно открыть по ссылке на изображении.
+Содержимое снимков не дорисовывалось и не собиралось из текстовых файлов.
+Оба отдельных теста и общий прогон завершились с кодом `0`.
 
-![Результат отдельного теста Qwen](text_model_test.png)
+[![Результат отдельного теста Qwen](text_model_test.png)](text_model_test.png)
 
-![Результат отдельного теста BGE-M3](embedding_model_test.png)
+[![Результат отдельного теста BGE-M3](embedding_model_test.png)](embedding_model_test.png)
+
+Общий запуск `python3 test_api.py`: обе модели успешно прошли проверки.
+Полный вывод: [`artifacts/system_test.txt`](artifacts/system_test.txt).
+
+[![Общий прогон тестов](artifacts/screenshots/system_test.png)](artifacts/screenshots/system_test.png)
+
+Состояние Docker: оба контейнера `healthy`, показаны опубликованные порты.
+
+[![Состояние контейнеров Docker](artifacts/screenshots/docker_status.png)](artifacts/screenshots/docker_status.png)
+
+Прямые HTTP-запросы: оба `/health` возвращают `200`, `/v1/models` сообщает
+Qwen2.5-7B-Instruct, а `/info` — BAAI/bge-m3 и параметры TEI.
+В выводе сведений о моделях выбраны только нужные поля JSON.
+
+[![Готовность API и сведения о моделях](artifacts/screenshots/api_health.png)](artifacts/screenshots/api_health.png)
 
 ### Результат контрольного запуска
 

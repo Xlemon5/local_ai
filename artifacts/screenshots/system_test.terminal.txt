@@ -1,4 +1,16 @@
-Дата проверки (UTC): 2026-10-02T19:14:44.450881+00:00
+local_ai % python3 test_api.py 2>&1 | tee artifacts/system_test.txt
+Дата проверки (UTC): 2026-10-02T19:14:49.978670+00:00
+
+=== Qwen /v1/chat/completions ===
+Модель: Qwen2.5-7B-Instruct
+API: /v1/models и /v1/chat/completions
+Вопрос: Сколько будет 6 * 7? Ответь только числом, без пояснений.
+Ответ модели: 42
+Ожидаемый ответ: 42
+Завершение генерации: stop
+Токены: вход 51, ответ 3
+PASS: все проверки этой модели пройдены.
+Длительность группы: 2.005 с
 
 === BGE-M3 embeddings ===
 Модель: BAAI/bge-m3
@@ -19,7 +31,11 @@ API: /embed и /v1/embeddings
 Перевод и перефразирование ближе, чем текст на другую тему.
 Одинаковые тексты и результаты двух API согласованы.
 PASS: все проверки этой модели пройдены.
-Длительность группы: 3.065 с
+Длительность группы: 0.733 с
 
-Отчёт: artifacts/embeddings-test-report.json
+Отчёт: artifacts/test-report.json
 Все проверки пройдены.
+local_ai % print "Код завершения: ${pipestatus[1]}"
+Код завершения: 0
+local_ai % printf done > /private/tmp/local_ai_capture_2.done
+local_ai %

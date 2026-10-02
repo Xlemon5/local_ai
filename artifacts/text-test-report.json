@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-10-02T06:54:39.249911+00:00",
+  "timestamp_utc": "2026-10-02T19:14:31.583867+00:00",
   "checks": [
     {
       "name": "Qwen /v1/chat/completions",
@@ -17,7 +17,7 @@
         },
         "finish_reason": "stop"
       },
-      "duration_seconds": 2.411
+      "duration_seconds": 10.342
     }
   ],
   "llm_url": "http://127.0.0.1:8000",
